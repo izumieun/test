@@ -20,5 +20,8 @@ jobs:
 
     - uses: actions/checkout@v2
 
+    - name: sleep
+      run: sleep 10
+
     - name: echo2
       run: echo ${{ steps.vars.outputs.datetime }}
