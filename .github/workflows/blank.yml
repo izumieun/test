@@ -12,6 +12,7 @@ jobs:
 
     env:
       HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_PROD }}
+      HEROKU_PIPELINE_NAME: ssk-helloworld-pipe
 
     steps:
     - name: Set outputs
@@ -31,3 +32,12 @@ jobs:
 
     - name: echo3
       run: echo ${{ env.HEROKU_APP_NAME }}
+
+    - name: HEROKU config
+      uses: "actions/heroku@master"
+      with:
+        args: config:set HELLO=GOODBYE -p ${{ env.HEROKU_PIPELINE_NAME }}
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      #  HEROKU_APP: env.HEROKU_APP_NAME
+
