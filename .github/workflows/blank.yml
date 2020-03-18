@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_PROD }}
+
     steps:
     - name: Set outputs
       id: vars
@@ -25,3 +28,6 @@ jobs:
 
     - name: echo2
       run: echo ${{ steps.vars.outputs.datetime }}
+
+    - name: echo3
+      run: echo ${{ env.HEROKU_APP_NAME }}
