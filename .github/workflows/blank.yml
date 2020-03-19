@@ -31,5 +31,5 @@ jobs:
       run: echo ${{ steps.vars.outputs.datetime }}
 
     - name: Set HEROKU review-apps config
-      run: curl -n -X PATCH https://api.heroku.com/pipelines/${{HEROKU_PIPELINE_ID}}/stage/${{HEROKU_PIPELINE_COUPLING_STAGE}}/config-vars -d '{"HELLO": "${{steps.vars.outputs.datetime}}"}' -H "Content-Type: application/json" -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY"
+      run: curl -n -X PATCH "https://api.heroku.com/pipelines/${{ env.HEROKU_PIPELINE_ID }}/stage/${{ env.HEROKU_PIPELINE_COUPLING_STAGE }}/config-vars" -d '{"HELLO":"${{ steps.vars.outputs.datetime }}"}' -H "Content-Type:application/json" -H "Accept:application/vnd.heroku+json; version=3" -H "Authorization:Bearer ${{ secrets.HEROKU_API_KEY }}"
 
