@@ -9,10 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     env:
-      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME_PROD }}
-      HEROKU_PIPELINE_NAME: ssk-helloworld-pipe
+      HEROKU_PIPELINE_ID: ${{secrets.HEROKU_PIPELINE_ID}}
+      HEROKU_PIPELINE_COUPLING_STAGE: review
 
     steps:
     - name: Set outputs
@@ -30,14 +30,13 @@ jobs:
     - name: echo2
       run: echo ${{ steps.vars.outputs.datetime }}
 
-    - name: echo3
-      run: echo ${{ env.HEROKU_APP_NAME }}
-
-    - name: HEROKU config
-      uses: "actions/heroku@master"
-      with:
-        args: config:set HELLO=GOODBYE -p ${{ env.HEROKU_PIPELINE_NAME }}
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      #  HEROKU_APP: env.HEROKU_APP_NAME
+    - name: Set HEROKU review-apps config
+      run: |
+        curl -n -X PATCH https://api.heroku.com/pipelines/${{HEROKU_PIPELINE_ID}}/stage/${{HEROKU_PIPELINE_COUPLING_STAGE}}/config-vars \
+          -d '{
+          "HELLO": "${{steps.vars.outputs.datetime}}"
+        }' \
+          -H "Content-Type: application/json" \
+          -H "Accept: application/vnd.heroku+json; version=3"\
+          -H "Authorization: Bearer ${{secrets.HEROKU_API_KEY}}
 
